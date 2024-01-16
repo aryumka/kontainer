@@ -2,16 +2,27 @@ package context
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import types.Bar
+import types.Foo
 
-class MoneyTests: FunSpec({
-    class Foo(val value: String)
 
-    context("Registering a bean") {
+class ContainerTest: FunSpec({
+
+    context("Bean Registration") {
         test("should be able to register a bean") {
             val container = Container()
-            val foo = Foo("bar")
-            container.register("foo", foo)
-            container.getBean<Foo>("foo") shouldBe foo
+            val foo = Foo()
+            container.register("Foo", Foo::class)
+            val bean = container.getBean<Foo>("Foo")
+            bean::class shouldBe foo::class
+        }
+    }
+
+    context("Dependency Injection") {
+        test("should be able to inject dependencies") {
+            val container = Container()
+            val foo = Foo()
+            val bar = Bar(foo)
         }
     }
 

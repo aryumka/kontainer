@@ -1,13 +1,17 @@
 package context
 
-class Container {
-    private val beans = mutableMapOf<String, Any>()
+import types.Foo
+import kotlin.reflect.KClass
 
-    fun <T : Any> register(name: String, bean: T) {
-        beans[name] = bean
+class Container {
+    private val registeredBean = mutableMapOf<String, Any>()
+
+    fun register(name: String, kClass: KClass<*>) {
+        val bean: Any = kClass.constructors.first().call()
+        registeredBean[name] = bean
     }
 
     fun <T> getBean(name: String): T {
-        return beans[name] as T
+        return registeredBean[name] as T
     }
 }
