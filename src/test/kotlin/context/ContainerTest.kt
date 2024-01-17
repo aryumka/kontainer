@@ -21,8 +21,9 @@ class ContainerTest: FunSpec({
     context("Dependency Injection") {
         test("should be able to inject dependencies") {
             val container = Container()
-            val foo = Foo()
-            val bar = Bar(foo)
+            container.register("Foo", Foo::class)
+            container.register("Bar", Bar::class)
+            getBean<Bar>("Bar").foo::class shouldBe Foo::class
         }
     }
 

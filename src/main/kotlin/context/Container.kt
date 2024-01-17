@@ -7,7 +7,7 @@ class Container {
     private val registeredBean = mutableMapOf<String, Any>()
 
     fun register(name: String, kClass: KClass<*>) {
-        val bean: Any = kClass.constructors.first().call()
+        val bean = kClass
         registeredBean[name] = bean
     }
 
