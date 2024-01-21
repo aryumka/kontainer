@@ -7,18 +7,20 @@ class Container {
     val createdBean = mutableMapOf<String, Any>()
     private val registeredBean = mutableListOf<KClass<*>>()
     private val dependencyGraph = mutableMapOf<KClass<*>, List<KClass<*>>>()
-    private val edgeList = mutableListOf<Pair<KClass<*>, KClass<*>>>()
-    private var rootList = intArrayOf()
-    private var rootMap = mutableMapOf<KClass<*>, Int>()
+    private val edges = mutableListOf<Pair<KClass<*>, KClass<*>>>()
+    private var rootIndices = intArrayOf()
+    private var rootIdxMap = mutableMapOf<KClass<*>, Int>()
+
+    //todo beanNotRegistered Exception, singleton bean, qualifier, KMP
 
     fun register(kClass: KClass<*>) {
         registeredBean.add(kClass)
-        rootMap[kClass] = registeredBean.size - 1
+        rootIdxMap[kClass] = registeredBean.size - 1
     }
 
     fun loadBeans() {
-        makeGraph()
-        makeRootList()
+        setDependencyGraph()
+        initRootIndices()
         unionFind()
         createBeans()
     }
@@ -27,7 +29,7 @@ class Container {
         return createdBean[name] as T
     }
 
-    private fun makeGraph() {
+    private fun setDependencyGraph() {
         for (bean in registeredBean) {
             val constructor = bean.primaryConstructor!!
             val parameters = constructor.parameters
@@ -35,35 +37,35 @@ class Container {
             dependencyGraph[bean] = parameterTypes
 
             for (parameter in parameterTypes) {
-                edgeList.add(Pair(bean, parameter))
+                edges.add(Pair(bean, parameter))
             }
         }
     }
 
-    private fun makeRootList() {
-        rootList = IntArray(registeredBean.size)
-        for (i in rootList.indices) rootList[i] = i
+    private fun initRootIndices() {
+        rootIndices = IntArray(registeredBean.size)
+        for (i in rootIndices.indices) rootIndices[i] = i
     }
 
     private fun unionFind() {
-        for (edge in edgeList) {
+        for (edge in edges) {
             val (parent, child) = edge
-            val parentIndex = rootMap[parent]!!
-            val childIndex = rootMap[child]!!
-            for (i in rootList.indices) {
-                if (rootList[i] == childIndex) {
-                    if (rootList[i] == rootList[parentIndex]) {
+            val parentIndex = rootIdxMap[parent]!!
+            val childIndex = rootIdxMap[child]!!
+            for (i in rootIndices.indices) {
+                if (rootIndices[i] == childIndex) {
+                    if (rootIndices[i] == rootIndices[parentIndex]) {
                         throw Exception("Circular Dependency for $parent and $child")
                     }
-                    rootList[i] = rootList[parentIndex]
+                    rootIndices[i] = rootIndices[parentIndex]
                 }
             }
         }
     }
 
     private fun createBeans() {
-        for (i in rootList.indices) {
-            if (rootList[i] == i) {
+        for (i in rootIndices.indices) {
+            if (rootIndices[i] == i) {
                 createBean(registeredBean[i], dependencyGraph[registeredBean[i]]!!)
             }
         }
