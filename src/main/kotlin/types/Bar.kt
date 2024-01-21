@@ -1,5 +1,5 @@
 package types
 
 class Bar(
-    private val foo: Foo) {
+    val foo: Foo) {
 }
