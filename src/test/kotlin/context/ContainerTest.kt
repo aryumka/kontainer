@@ -1,6 +1,6 @@
 package context
 
-import Exception.CircularDependencyException
+import exception.CircularDependencyException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
