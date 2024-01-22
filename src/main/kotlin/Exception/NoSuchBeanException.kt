@@ -1,0 +1,4 @@
+package Exception
+
+class NoSuchBeanException {
+}

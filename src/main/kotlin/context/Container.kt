@@ -1,5 +1,6 @@
 package context
 
+import Exception.CircularDependencyException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
@@ -11,7 +12,7 @@ class Container {
     private var rootIndices = intArrayOf()
     private var rootIdxMap = mutableMapOf<KClass<*>, Int>()
 
-    //todo beanNotRegistered Exception, singleton bean, qualifier, KMP
+    //todo singleton bean, qualifier, KMP
 
     fun register(kClass: KClass<*>) {
         registeredBean.add(kClass)
@@ -55,7 +56,7 @@ class Container {
             for (i in rootIndices.indices) {
                 if (rootIndices[i] == childIndex) {
                     if (rootIndices[i] == rootIndices[parentIndex]) {
-                        throw Exception("Circular Dependency for $parent and $child")
+                        throw CircularDependencyException("Circular Dependency for $parent and $child")
                     }
                     rootIndices[i] = rootIndices[parentIndex]
                 }

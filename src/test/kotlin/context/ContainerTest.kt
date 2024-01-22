@@ -1,5 +1,7 @@
 package context
 
+import Exception.CircularDependencyException
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import types.Bar
@@ -81,10 +83,8 @@ class ExceptionTest: FunSpec({
                 container.register(Y::class)
                 container.register(Z::class)
 
-                try {
+                val exception = shouldThrow<CircularDependencyException> {
                     container.loadBeans()
-                } catch (e: Exception) {
-                    e.message shouldBe "Circular Dependency for class ${Z::class.qualifiedName} and class ${X::class.qualifiedName}"
                 }
             }
         }
