@@ -1,4 +1,0 @@
-package exception
-
-class NoSuchBeanException {
-}
