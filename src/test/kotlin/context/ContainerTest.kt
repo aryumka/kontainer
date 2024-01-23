@@ -4,6 +4,7 @@ import exception.CircularDependencyException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import types.Bar
 import types.Foo
 
@@ -13,11 +14,10 @@ class ContainerTest: FunSpec({
     context("Bean Registration") {
         test("should be able to register a bean") {
             val container = Container()
-            val foo = Foo()
             container.register(Foo::class)
             container.loadBeans()
             val bean = container.getBean<Foo>("Foo")
-            bean::class shouldBe foo::class
+            bean.shouldBeInstanceOf<Foo>()
         }
     }
 

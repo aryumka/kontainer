@@ -81,4 +81,3 @@ class Container {
         createdBean[k.simpleName!!] = k.primaryConstructor!!.call(*v.map { createdBean[it.simpleName!!] }.toTypedArray())
     }
 }
-
