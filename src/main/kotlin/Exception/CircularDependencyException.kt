@@ -1,3 +1,3 @@
 package exception
 
-class CircularDependencyException(message: String): Exception(message)
+public class CircularDependencyException(message: String): RuntimeException(message)

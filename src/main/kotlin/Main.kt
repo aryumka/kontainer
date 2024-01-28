@@ -12,3 +12,5 @@ fun main() {
     val helloWorld = container.getBean<HelloService>("HelloService")
     helloWorld.hello()
 }
+
+fun ddd(name: String){TODO()}

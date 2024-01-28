@@ -1,6 +1,7 @@
 package context
 
 import exception.CircularDependencyException
+import exception.NoSuchBeanException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
@@ -27,6 +28,9 @@ class Container {
     }
 
     inline fun <reified T> getBean(name: String): T {
+        if (!createdBean.containsKey(name) || createdBean[name] == null) {
+            throw NoSuchBeanException("Bean $name not found")
+        }
         return createdBean[name] as T
     }
 
