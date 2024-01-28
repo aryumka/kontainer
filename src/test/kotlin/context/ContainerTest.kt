@@ -13,7 +13,7 @@ class ContainerTest: FunSpec({
 
     context("Bean Registration") {
         test("should be able to register a bean") {
-            val container = Container()
+            val container = Container
             container.register(Foo::class)
             container.loadBeans()
             val bean = container.getBean<Foo>("Foo")
@@ -23,7 +23,7 @@ class ContainerTest: FunSpec({
 
     context("Dependency Injection") {
         test("should be able to inject dependencies") {
-            val container = Container()
+            val container = Container
             container.register(Foo::class)
             container.register(Bar::class)
 
@@ -46,7 +46,7 @@ class ContainerTest: FunSpec({
             class G
             class F(val g: G)
 
-            val container = Container()
+            val container = Container
 
             container.register(A::class)
             container.register(B::class)
@@ -76,7 +76,7 @@ class ExceptionTest: FunSpec({
     context("Exception handling") {
         context("Circular Dependency") {
             test("should throw exception when circular dependency is detected") {
-                val container = Container()
+                val container = Container
 
                 container.register(W::class)
                 container.register(X::class)

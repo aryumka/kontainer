@@ -5,15 +5,15 @@ import exception.NoSuchBeanException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-class Container {
-    val createdBean = mutableMapOf<String, Any>()
+object Container {
+    private val createdBean = mutableMapOf<String, Any>()
     private val registeredBean = mutableListOf<KClass<*>>()
     private val dependencyGraph = mutableMapOf<KClass<*>, List<KClass<*>>>()
     private val edges = mutableListOf<Pair<KClass<*>, KClass<*>>>()
     private var rootIndices = intArrayOf()
     private var rootIdxMap = mutableMapOf<KClass<*>, Int>()
 
-    //todo singleton bean, qualifier, KMP
+    //todo qualifier, KMP
 
     fun register(kClass: KClass<*>) {
         registeredBean.add(kClass)
@@ -27,7 +27,7 @@ class Container {
         createBeans()
     }
 
-    inline fun <reified T> getBean(name: String): T {
+    fun <T> getBean(name: String): T {
         if (!createdBean.containsKey(name) || createdBean[name] == null) {
             throw NoSuchBeanException("Bean $name not found")
         }

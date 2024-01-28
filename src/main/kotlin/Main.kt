@@ -4,7 +4,7 @@ import types.Foo
 import types.HelloService
 
 fun main() {
-    val container = Container()
+    val container = Container
     container.register(HelloService::class)
     container.register(Foo::class)
     container.register(Bar::class)
