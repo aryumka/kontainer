@@ -5,7 +5,7 @@ import exception.NoSuchBeanException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-object Container {
+object Kontainer {
     private val createdBean = mutableMapOf<String, Any>()
     private val registeredBean = mutableListOf<KClass<*>>()
     private val dependencyGraph = mutableMapOf<KClass<*>, List<KClass<*>>>()
