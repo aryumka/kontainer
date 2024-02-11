@@ -20,7 +20,7 @@ object Kontainer {
         rootIdxMap[kClass] = registeredBean.size - 1
     }
 
-    fun loadBeans() {
+    fun start() {
         setDependencyGraph()
         initRootIndices()
         unionFind()
