@@ -1,5 +1,5 @@
 # Kontainer
-A simple DI container written in Kotlin.
+A simple DI container written in Kotlin available in maven central repository.
 
 ## Why I implemented `Kontainer` myself?
 I wanted to understand how DI containers work under the hood. I also wanted to understand how to implement a simple DI container in Kotlin.
@@ -8,6 +8,16 @@ I wanted to understand how DI containers work under the hood. I also wanted to u
 - Bean registration
 - Dependency resolution
 - Resolving beans by name and type
+- Circular dependency detection
+
+## Setup
+Add the plugin to your `build.gradle.kts` file.
+```kotlin
+plugins {
+    implementation("io.github.aryumka:kontainer:0.0.1")
+    implementation(kotlin("reflect"))
+}
+```
 
 ## Usage
 
@@ -39,6 +49,7 @@ fun main() {
     helloService.sayHello() //prints "Saving message: Hello, World!"
 }
 ```
+
 **Note: This is inspired by DI containers such as Spring and Koin
 and is created for educational purposes. It may not cover all edge cases and
 optimizations present in production-ready libraries.
