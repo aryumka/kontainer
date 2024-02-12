@@ -1,7 +1,7 @@
-package context
+package io.github.aryumka.context
 
-import exception.CircularDependencyException
-import exception.NoSuchBeanException
+import io.github.aryumka.exception.CircularDependencyException
+import io.github.aryumka.exception.NoSuchBeanException
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
@@ -25,6 +25,15 @@ object Kontainer {
         initRootIndices()
         unionFind()
         createBeans()
+    }
+
+    fun end() {
+        createdBean.clear()
+        registeredBean.clear()
+        dependencyGraph.clear()
+        edges.clear()
+        rootIndices = intArrayOf()
+        rootIdxMap.clear()
     }
 
     fun <T> getBean(name: String): T {
