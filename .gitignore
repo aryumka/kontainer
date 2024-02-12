@@ -38,3 +38,4 @@ outTmp/
 /kotlin-native/dist
 kotlin-ide/
 .kotlin/
+gradle.properties

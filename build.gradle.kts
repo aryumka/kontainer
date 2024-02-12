@@ -2,12 +2,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.9.21"
-
+    `maven-publish`
+    id("net.thebugmc.gradle.sonatype-central-portal-publisher") version "1.0.0"
 }
 
-group = "aryumka"
-version = "0.0.1-SNAPSHOT"
-
+group = "io.github.aryumka"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
@@ -20,10 +20,33 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "19"
+    kotlinOptions.jvmTarget = "21"
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
+centralPortal {
+    pom {
+        name.set("kontainer")
+        description.set("kontainer - A simple DI container written in Kotlin.")
+        url.set("https://github.com/aryumka/kontainer/")
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://opensource.org/licenses/MIT")
+            }
+        }
+        scm {
+            url.set("https://github.com/aryumka/kontainer/")
+            connection.set("https://github.com/aryumka/kontainer.git")
+        }
+        developers {
+            developer {
+                name.set("Aryumka")
+                email.set("yooooar@gmail.com")
+            }
+        }
+    }
+}

@@ -1,7 +1,9 @@
 package context
 
-import exception.CircularDependencyException
+import io.github.aryumka.exception.CircularDependencyException
+import io.github.aryumka.context.Kontainer
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -9,29 +11,37 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 class Bar(val foo: Foo)
 
 class Foo ()
-class HelloService(private val bar: Bar) {
-    fun hello() {
-        println("Hello World")
-    }
 
-    fun getBar():Bar {
-        return bar
+class HelloDao {
+    fun save(message: String) {
+        println("Saving message: $message")
     }
+}
 
-    fun getFoo():Foo {
-        return bar.foo
+class HelloService(val dao: HelloDao) {
+    fun sayHello() {
+        dao.save("Hello, World!")
     }
 }
 
 class KontainerTest: FunSpec({
+    isolationMode = IsolationMode.InstancePerLeaf
+
+    beforeEach { Kontainer.end() }
 
     context("Bean Registration") {
         test("should be able to register a bean") {
             val kontainer = Kontainer
-            kontainer.register(Foo::class)
-            kontainer.loadBeans()
-            val bean = kontainer.getBean<Foo>("Foo")
-            bean.shouldBeInstanceOf<Foo>()
+            kontainer.register(HelloService::class)
+            kontainer.register(HelloDao::class)
+            kontainer.start()
+
+            val bean = kontainer.getBean<HelloService>("HelloService")
+            //should look like below but not sure how to do it
+            //val bean = kontainer.getBean<Foo>()
+
+            bean::class shouldBe HelloService::class
+            bean.sayHello() // Saving message: Hello, World!
         }
     }
 
@@ -41,7 +51,7 @@ class KontainerTest: FunSpec({
             kontainer.register(Foo::class)
             kontainer.register(Bar::class)
 
-            kontainer.loadBeans()
+            kontainer.start()
 
             val bar = kontainer.getBean<Bar>("Bar")
             bar.foo::class shouldBe Foo::class
@@ -70,7 +80,7 @@ class KontainerTest: FunSpec({
             kontainer.register(F::class)
             kontainer.register(G::class)
 
-            kontainer.loadBeans()
+            kontainer.start()
 
             val a = kontainer.getBean<A>("A")
             a.b::class shouldBe B::class
@@ -98,7 +108,7 @@ class ExceptionTest: FunSpec({
                 kontainer.register(Z::class)
 
                 val exception = shouldThrow<CircularDependencyException> {
-                    kontainer.loadBeans()
+                    kontainer.start()
                 }
             }
         }
