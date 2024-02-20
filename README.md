@@ -10,6 +10,10 @@ I wanted to understand how DI containers work under the hood. I also wanted to u
 - Resolving beans by name and type
 - Circular dependency detection
 
+## Building
+- gradle 8.5+
+- jvm 21+
+
 ## Setup
 Add the plugin to your `build.gradle.kts` file.
 ```kotlin
