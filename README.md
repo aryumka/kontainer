@@ -38,19 +38,19 @@ class HelloService(dao: HelloDao) {
     }
 }
 
-//register a service
+// register a service
 fun main() {
     val kontainer = Kontainer()
     //register beans 
     kontainer.register(HelloService::class)
     kontainer.register(HelloDao::class)
     
-    //start the kontainer
+    // start the kontainer
     kontainer.start()
     
-    //resolve an instance
+    // resolve an instance
     val helloService = kontainer.getBean<HelloService>("HelloService")
-    helloService.sayHello() //prints "Saving message: Hello, World!"
+    helloService.sayHello() // prints "Saving message: Hello, World!"
 }
 ```
 
